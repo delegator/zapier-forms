@@ -60,9 +60,9 @@ class Webhooks extends Collection
             ->all();
     }
 
-   /**
-     * Save site defaults collection to yaml.
-     */
+    /**
+      * Save site defaults collection to yaml.
+      */
     public function save()
     {
         File::put($this->path(), YAML::dump($this->items));
@@ -75,7 +75,7 @@ class Webhooks extends Collection
      */
     protected function getDefaults()
     {
-        return collect(YAML::file(__DIR__.'/../content/zapier-webhooks.yaml')->parse())
+        return collect(YAML::file(__DIR__ . '/../content/zapier-webhooks.yaml')->parse())
             ->merge(YAML::file($this->path())->parse())
             ->all();
     }
@@ -95,13 +95,13 @@ class Webhooks extends Collection
     */
     public static function getForms()
     {
-      $forms = [];
+        $forms = [];
 
-      \Statamic\Facades\Form::all()->map(function($form) use (&$forms) {
-          $forms[$form->handle] = $form->title;
-      });
+        \Statamic\Facades\Form::all()->map(function ($form) use (&$forms) {
+            $forms[$form->handle] = $form->title;
+        });
 
-      return $forms;
+        return $forms;
     }
 
     /**
@@ -109,13 +109,15 @@ class Webhooks extends Collection
      */
     public static function byForm($formHandle)
     {
-      $formsAndWebhooks = collect(Webhooks::load()->first());
+        $formsAndWebhooks = collect(Webhooks::load()->first());
 
-      $webhooks = $formsAndWebhooks->where('form', $formHandle)->all();
+        $webhooks = $formsAndWebhooks->where('form', $formHandle)->all();
 
-      if (is_null($webhooks)) return null;
+        if (is_null($webhooks)) {
+            return null;
+        }
 
-      return $webhooks;
+        return $webhooks;
     }
 
     /**
@@ -126,32 +128,36 @@ class Webhooks extends Collection
     public static function blueprint()
     {
         return Blueprint::makeFromFields([
-          'webhooks' => [
-            'type' => 'grid',
-            'display' => 'Zapier Webhooks',
-            'instruction' => 'Add Webhooks to forms',
-            'add_row' => 'Add new webhook',
-            'fields' => [
-              [
-                'handle' => 'form',
-                'field' => [
-                  'type' => 'select',
-                  'display' => 'Form',
-                  'options' => static::getForms(),
-                  'required' => 'true'
-                ]
-              ],
-              [
-                'handle' => 'webhook',
-                'field' => [
-                  'type' => 'text',
-                  'display' => 'Zapier Webhook',
-                  'validate' => 'required|active_url',
-                  'input_type' => 'url'
-                ]
-              ]              
-            ]
-          ]
+            'webhooks' => [
+                'type' => 'grid',
+                'display' => 'Zapier Webhooks',
+                'instructions' => 'Add Webhooks to forms',
+                'add_row' => 'Add new webhook',
+                'min_rows' => 0,
+                'max_rows' => 100,
+                'reorderable' => false,
+                'fields' => [
+                    [
+                        'handle' => 'form',
+                        'field' => [
+                            'type' => 'select',
+                            'display' => 'Form',
+                            'options' => static::getForms(),
+                            'required' => 'true',
+                        ],
+                    ],
+                    [
+                        'handle' => 'webhook',
+                        'field' => [
+                            'type' => 'text',
+                            'display' => 'Zapier Webhook',
+                            'validate' => 'required|active_url',
+                            'input_type' => 'url',
+                        ],
+                    ],
+                ],
+            ],
         ]);
     }
 }
+

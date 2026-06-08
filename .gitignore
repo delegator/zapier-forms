@@ -2,5 +2,6 @@ node_modules
 vendor
 mix-manifest.json
 composer.lock
+package-lock.json
 .phpunit.result.cache
-.php-cs-fixer.cache
+.php-cs-fixer.*

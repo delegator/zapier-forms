@@ -4,9 +4,11 @@ namespace GertTimmerman\StatamicZapier\Http\Controllers;
 
 use Statamic\Facades\User;
 use Illuminate\Http\Request;
+use Statamic\CP\PublishForm;
 use GertTimmerman\StatamicZapier\Webhooks;
 use Statamic\Http\Controllers\CP\CpController;
 use Statamic\Support\Arr;
+use Inertia\Inertia;
 
 class WebhooksController extends CpController
 {
@@ -21,15 +23,12 @@ class WebhooksController extends CpController
             ->addValues(Webhooks::load()->all())
             ->preProcess();
 
-        return view('statamic-zapier::index', [
-            'title' => 'Zapier Webhooks',
-            'action' => cp_route('statamic-zapier.index'),
-            'blueprint' => $blueprint->toPublishArray(),
-            'meta' => $fields->meta(),
-            'values' => $fields->values()
-        ]);
+        return PublishForm::make($blueprint)
+          ->title("Statamic Zapier")
+          ->icon('hierarchy-hub-integration-connection')
+          ->values($fields->values()->all())
+          ->submittingTo(cp_route('statamic-zapier.update'), 'POST');
     }
-
 
     public function update(Request $request)
     {

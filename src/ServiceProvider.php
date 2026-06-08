@@ -12,11 +12,11 @@ class ServiceProvider extends AddonServiceProvider
     protected $listen = [
         'Statamic\Events\FormSubmitted' => [
             'GertTimmerman\StatamicZapier\Listeners\PushToWebhook',
-        ]
+        ],
     ];
 
     protected $routes = [
-        'cp' => __DIR__.'/../routes/cp.php',
+        'cp' => __DIR__ . '/../routes/cp.php',
     ];
 
     public function boot()
@@ -25,9 +25,6 @@ class ServiceProvider extends AddonServiceProvider
 
         // load publishables
         $this->bootPublishables();
-
-        // load views
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/', 'statamic-zapier');
 
         // load navigation
         $this->bootNavigation();
@@ -42,7 +39,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/statamic/zapier.php' => config_path('/statamic/zapier.php'),
+                __DIR__ . '/../config/statamic/zapier.php' => config_path('/statamic/zapier.php'),
             ], 'config');
         }
 
@@ -52,10 +49,10 @@ class ServiceProvider extends AddonServiceProvider
     private function bootNavigation(): void
     {
         Nav::extend(function ($nav) {
-            $nav->tools('Zapier Webhooks')
+            $nav->tools('Webhooks')
                 ->can('configure form zapier webhooks')
                 ->route('statamic-zapier.index')
-                ->icon('form');
+                ->icon('hierarchy-hub-integration-connection');
         });
     }
 }
