@@ -31,7 +31,7 @@ class ServiceProvider extends AddonServiceProvider
 
         // permissions
         Permission::group('statamic-zapier', 'Statamic Zapier', function () {
-            Permission::register('Configure zapier webhooks for forms')->label('Configure Zapier Webhooks');
+            Permission::register('configure form zapier webhooks')->label('Configure Webhooks');
         });
     }
 
