@@ -1,11 +1,11 @@
 <?php
 
-namespace GertTimmerman\StatamicZapier\Http\Controllers;
+namespace Delegator\StatamicZapier\Http\Controllers;
 
 use Statamic\Facades\User;
 use Illuminate\Http\Request;
 use Statamic\CP\PublishForm;
-use GertTimmerman\StatamicZapier\Webhooks;
+use Delegator\StatamicZapier\Webhooks;
 use Statamic\Http\Controllers\CP\CpController;
 use Statamic\Support\Arr;
 use Inertia\Inertia;

@@ -1,6 +1,6 @@
 <?php
 
-namespace GertTimmerman\StatamicZapier;
+namespace Delegator\StatamicZapier;
 
 use Illuminate\Support\Collection;
 use Statamic\Facades\Blueprint;
@@ -130,12 +130,11 @@ class Webhooks extends Collection
         return Blueprint::makeFromFields([
             'webhooks' => [
                 'type' => 'grid',
-                'display' => 'Zapier Webhooks',
-                'instructions' => 'Add Webhooks to forms',
+                'display' => 'Webhooks',
+                'instructions' => 'Map forms to webhook URLs',
                 'add_row' => 'Add new webhook',
                 'min_rows' => 0,
-                'max_rows' => 100,
-                'reorderable' => false,
+                'reorderable' => true,
                 'fields' => [
                     [
                         'handle' => 'form',
@@ -150,7 +149,7 @@ class Webhooks extends Collection
                         'handle' => 'webhook',
                         'field' => [
                             'type' => 'text',
-                            'display' => 'Zapier Webhook',
+                            'display' => 'Webhook URL',
                             'validate' => 'required|active_url',
                             'input_type' => 'url',
                         ],

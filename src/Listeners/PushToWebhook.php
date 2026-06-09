@@ -1,12 +1,12 @@
 <?php
 
-namespace GertTimmerman\StatamicZapier\Listeners;
+namespace Delegator\StatamicZapier\Listeners;
 
 use GuzzleHttp\Client;
 use Statamic\Facades\Asset;
 use Statamic\Events\FormSubmitted;
 use Illuminate\Support\Facades\Http;
-use GertTimmerman\StatamicZapier\Webhooks;
+use Delegator\StatamicZapier\Webhooks;
 
 class PushToWebhook
 {
@@ -20,7 +20,9 @@ class PushToWebhook
     {
         $webhooks = Webhooks::byForm($event->submission->form->handle());
 
-        if (is_null($webhooks) || config('statamic.zapier.disable_webhooks')) return;
+        if (is_null($webhooks) || config('statamic.zapier.disable_webhooks')) {
+            return;
+        }
 
         foreach ($webhooks as $webhook) {
             $this->sendToWebhook($webhook['webhook'], $event);
@@ -49,23 +51,25 @@ class PushToWebhook
 
         $multipartBody = [];
 
-        foreach($attachmentsFields as $handle) {
+        foreach ($attachmentsFields as $handle) {
             $formField = $event->submission->fields()->get($handle);
             $assetContainer = $formField['container'];
 
             $files = $event->submission->data()->get($handle);
 
             if (!is_array($files)) {
-                $files = array($files);
+                $files = [$files];
             }
 
-            foreach($files as $file) {
+            foreach ($files as $file) {
                 $asset = Asset::query()
                     ->where('container', $assetContainer)
                     ->where('path', 'like', '%' . $file . '%')
                     ->get();
 
-                if (is_null($asset)) continue;
+                if (is_null($asset)) {
+                    continue;
+                }
 
                 // get the first one, because we just need one asset
                 $asset = $asset[0];
@@ -74,14 +78,14 @@ class PushToWebhook
                     'name' => $handle,
                     'contents' => $asset->contents(),
                     'filename' => $asset->basename(),
-                    'Content-type' => 'multipart/form-data'
+                    'Content-type' => 'multipart/form-data',
                 ];
             }
-            
+
             unset($data[$handle]);
         }
 
-        foreach($data as $name => $value) {
+        foreach ($data as $name => $value) {
             if (is_array($value)) {
                 if (count($value) == 1) {
                     $value = $value[0];
@@ -92,20 +96,24 @@ class PushToWebhook
             $multipartBody[] = [
                 'name' => $name,
                 'contents' => $value,
-                'Content-type' => 'application/json'
+                'Content-type' => 'application/json',
             ];
         }
- 
+
         // send to webhookUrl
         $client = new Client();
-        $response = $client->request('POST', $webhookUrl, [
+        $response = $client->request(
+            'POST',
+            $webhookUrl,
+            [
                 'multipart' => $multipartBody,
             ],
             [
                 'headers' => [
-                    'Accept' => 'application/json'
-                ]
-            ]
+                    'Accept' => 'application/json',
+                ],
+            ],
         );
     }
 }
+

@@ -1,15 +1,12 @@
 {
-  "name": "gerttimmerman/statamic-zapier",
+  "name": "delegator/statamic-zapier",
   "description": "Statamic Zapier",
   "autoload": {
     "psr-4": {
-      "GertTimmerman\\StatamicZapier\\": "src"
+      "Delegator\\StatamicZapier\\": "src"
     }
   },
   "authors": [
-    {
-      "name": "Gert Timmerman"
-    },
     {
       "name": "Michael Utz"
     }
@@ -24,7 +21,7 @@
     },
     "laravel": {
       "providers": [
-        "GertTimmerman\\StatamicZapier\\ServiceProvider"
+        "Delegator\\StatamicZapier\\ServiceProvider"
       ]
     }
   },
