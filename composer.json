@@ -1,6 +1,7 @@
 {
   "name": "delegator/zapier-forms",
   "description": "Zapier Forms",
+  "license": "MIT",
   "autoload": {
     "psr-4": {
       "Delegator\\ZapierForms\\": "src"
